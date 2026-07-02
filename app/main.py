@@ -11,6 +11,10 @@ class EventPayload(BaseModel):
     date: str
     capacity: int
 
+class MakeRSVP(BaseModel):
+    name: str
+    response: str
+
 @app.get("/")
 def root():
     return {"status": "ok"}
@@ -40,3 +44,17 @@ def get_event(id: int):
         return events[id]
     else:
         raise HTTPException(status_code=404, detail="Event not found")
+    
+@app.post("/events/{id}/rsvp")
+def make_rsvp(id: int, payload: MakeRSVP):
+    if id not in events:
+        raise HTTPException(status_code=404, detail="Event not found")
+    
+    target_event=events[id]
+
+    if "attendees" not in target_event:
+        target_event["attendees"] = {}
+
+    target_event["attendees"][payload.name] = payload.response
+
+    return target_event
