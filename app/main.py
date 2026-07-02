@@ -30,7 +30,8 @@ def create_event(event: EventPayload):
         "id": assigned_id,
         "name": event.name,
         "date": event.date,
-        "capacity": event.capacity
+        "capacity": event.capacity,
+        "attendees": {}
     }
 
     events[assigned_id] = new_event_record
@@ -58,3 +59,9 @@ def make_rsvp(id: int, payload: MakeRSVP):
     target_event["attendees"][payload.name] = payload.response
 
     return target_event
+
+@app.get("/events/{id}/attendees")
+def find_attendees(id: int):
+    if id not in events:
+        raise HTTPException(status_code=404, detail="Event not found")
+    return events[id]["attendees"]
