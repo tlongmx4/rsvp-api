@@ -1,5 +1,6 @@
 from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel
+from enum import Enum
 
 app = FastAPI()
 
@@ -14,6 +15,11 @@ class EventPayload(BaseModel):
 class MakeRSVP(BaseModel):
     name: str
     response: str
+
+class RSVPStatus(str, Enum):
+    YES = "yes",
+    NO = "no",
+    MAYBE = "maybe"
 
 @app.get("/")
 def root():
