@@ -74,8 +74,6 @@ def make_rsvp(id: int, payload: MakeRSVP):
             if response == "yes":
                 yes_count += 1
 
-        print(f"yes_count={yes_count}, capacity={target_event['capacity']}, capacity_type={type(target_event['capacity'])}")
-
         if payload.response == "yes" and previous_response != "yes" and yes_count >= target_event["capacity"]:
             raise HTTPException(status_code=409, detail="Event is full")
         
